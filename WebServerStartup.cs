@@ -23,7 +23,7 @@ namespace WalletProxy
             app.UseDeveloperExceptionPage();
             app.UseRouting();
             app.UseCors();
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
