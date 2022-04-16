@@ -15,19 +15,17 @@ namespace WalletProxy
 
     public class StaticRestClientFactory : IRpcClientFactory
     {
-        //todo configsettings:
-        public static Uri EndPoint = new("http://127.0.0.1:8332");
-        public static string UserName = "helloiamaproxy";
-        public static string PassWord = "YcF7!&93YTs2Nhc@CJf";
-
+        private static Settings? Settings;//todo inject in container
         private static readonly Lazy<HttpClient> ClientInstance = new Lazy<HttpClient>(
             () =>
             {
+                Settings = new Setting().Settings;
+
                 var client = new HttpClient
                 {
-                    BaseAddress = EndPoint
+                    BaseAddress = new Uri(Settings!.rpcuri)
                 };
-                var auth = UserName + ":" + PassWord;
+                var auth = Settings.rpcuser + ":" + Settings.rpcpassword;
                 auth = Convert.ToBase64String(Encoding.UTF8.GetBytes(auth), Base64FormattingOptions.None);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", auth);
 
@@ -37,7 +35,7 @@ namespace WalletProxy
 
         public Uri GetUri()
         {
-            return EndPoint;
+            return new Uri(Settings!.rpcuri);
         }
 
         public HttpClient GetClient()
