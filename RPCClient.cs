@@ -1,11 +1,11 @@
-﻿using System.Text;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 // ReSharper disable InconsistentNaming
 
-namespace WalletProxy
-{
-	public class RPCClient : IRpcClient
+ 
+
+    public class RPCClient : IRpcClient
     {
         private readonly IRpcClientFactory rpcClientFactory;
 
@@ -285,7 +285,7 @@ namespace WalletProxy
 
 	}
 #pragma warning restore CS8618
-}
+ 
 
 public class RawTxStakeInputs
 {

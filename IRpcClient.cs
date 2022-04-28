@@ -1,5 +1,6 @@
-﻿namespace WalletProxy;
+// ReSharper disable InconsistentNaming
 
+ 
 public interface IRpcClient
 {
     Task<RawTransactionResponse> GetRawTransaction(string txId, int verbose = 0);
@@ -14,3 +15,4 @@ public interface IRpcClient
     Task<string> CreateRawCoinStakeTransaction(IReadOnlyList<RawTxStakeInputs> inputs,
         IReadOnlyList<RawTxStakeOutput> outputs, long timestamp);
 }
+ 
