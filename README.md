@@ -24,7 +24,10 @@ dotnet publish WalletProxy.csproj -c Release --runtime linux-x64 --no-self-conta
 (or use self-contained if there isnt a runtime net 6 installed)
 
 ## How to run:
-~~either use Dockerfile~~ (Todo: set root to: /bin/Release/net6.0/linux-x64/publish and setup ports etc)
+~~build with Dockerfile~~  
+~~then e.g.: sudo docker run -d -p 8332:8332 -p 9009:9009 nameofimage~~
+
+(todo: needs testing)
 
 or 
 
