@@ -10,7 +10,7 @@ builder.Services.AddCarter();
 
 await using var app = builder.Build();
 
-app.UseCors();
+app.UseCors(builder=> builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 //config endpoints with Carter:
 //app.MapGet("/", () => "Hello! This is .NET 6 Minimal API App Service").ExcludeFromDescription();

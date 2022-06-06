@@ -40,12 +40,12 @@ or
 ## endpoints:
 port 9009 is hardcoded, todo: add port to settings.json
 ```
-http://127.0.0.1:9009/ping
-http://127.0.0.1:9009/difficulty
-http://127.0.0.1:9009/block/count
-http://127.0.0.1:9009/block/{index:long}
-http://127.0.0.1:9009/block/hash/{hash}
-http://127.0.0.1:9009/transaction/raw/{txId}
-http://127.0.0.1:9009/transaction/decode/{transaction}
-http://127.0.0.1:9009/listunspents
+GET http://127.0.0.1:9009/ping
+GET http://127.0.0.1:9009/difficulty
+GET http://127.0.0.1:9009/block/count
+GET http://127.0.0.1:9009/block/{index:long}
+GET http://127.0.0.1:9009/block/hash/{hash}
+GET http://127.0.0.1:9009/transaction/raw/{txId}
+POST http://127.0.0.1:9009/transaction/raw/decode     {transaction:string}
+GET http://127.0.0.1:9009/listunspents
 ``` 

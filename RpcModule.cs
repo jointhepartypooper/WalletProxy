@@ -20,16 +20,28 @@ public class RpcModule : ICarterModule
             await rpcClient.GetBlock(hash)
         ).Produces<BlockResponse>(StatusCodes.Status200OK);
 
+        app.MapPost("/transaction/raw/decode", async (RawTransaction message, IRpcClient rpcClient)=>
+                await rpcClient.GetRawTransaction(message?.transaction??"")
+        ).Produces<DecodeRawTransactionResponse>(StatusCodes.Status200OK);
+        
         app.MapGet("/transaction/raw/{txId}", async (string txId, IRpcClient rpcClient) =>
             await rpcClient.GetRawTransaction(txId)
         ).Produces<RawTransactionResponse>(StatusCodes.Status200OK);
 
+        //obsolete as transaction might get to long:
         app.MapGet("/transaction/decode/{transaction}", async (string transaction, IRpcClient rpcClient) =>
             await  rpcClient.DecodeRawTransaction(transaction)
         ).Produces<DecodeRawTransactionResponse>(StatusCodes.Status200OK);
 
+        //obsolete as importaddress is needed 
         app.MapGet("/listunspents", async (IRpcClient rpcClient) =>
             await rpcClient.GetUnspents() 
         ).Produces<List<Unspent>>(StatusCodes.Status200OK);
     }
+
+    public class RawTransaction
+    {
+            public string? transaction{get;set;}
+    }
+
 }
