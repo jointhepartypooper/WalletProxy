@@ -1,3 +1,5 @@
+    namespace WalletProxy; 
+
     public interface IRpcClientFactory
     {
         Uri GetUri();

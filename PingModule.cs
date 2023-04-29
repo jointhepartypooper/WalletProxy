@@ -1,5 +1,7 @@
 using Carter;
- 
+
+namespace WalletProxy;
+
 public class PingModule : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)

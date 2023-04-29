@@ -1,5 +1,10 @@
 {
-    "rpcuri": "http://127.0.0.1:8332",
-    "rpcuser": "helloiamaproxy",
-    "rpcpassword": "YcF7!&93YTs2Nhc@CJf"
+  "Rpcuri": "http://127.0.0.1:8332",
+  "Rpcuser": "helloiamaproxy",
+  "Rpcpassword": "YcF7!&93YTs2Nhc@CJf",
+  "Discord": {
+    "BotToken": "add.your.own-botyo",
+    "TagUsers": "@here",
+    "ChannelId": 1101758973037781002
+  }
 }
