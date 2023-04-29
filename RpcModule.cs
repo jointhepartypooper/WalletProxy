@@ -1,4 +1,5 @@
 using Carter;
+using Newtonsoft.Json;
 
 namespace WalletProxy;
 
@@ -7,6 +8,10 @@ public class RpcModule : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapGet("/difficulty", async (IRpcClient rpcClient) =>
+            (await rpcClient.GetDifficulty()).pos
+        ).Produces<decimal>(StatusCodes.Status200OK);
+
+        app.MapGet("/difficulty/both", async (IRpcClient rpcClient) =>
             await rpcClient.GetDifficulty()
         ).Produces<DifficultyResponse>(StatusCodes.Status200OK);
 
@@ -19,17 +24,28 @@ public class RpcModule : ICarterModule
         ).Produces<string>(StatusCodes.Status200OK);
 
         app.MapGet("/block/hash/{hash}", async (string hash, IRpcClient rpcClient) =>
-            await rpcClient.GetBlock(hash)
-        ).Produces<BlockResponse>(StatusCodes.Status200OK);
+        {
+            var block = await rpcClient.GetBlock(hash);
+            return JsonConvert.SerializeObject(block, Formatting.Indented);
+        }
+        ).Produces<string>(StatusCodes.Status200OK);
 
         app.MapPost("/transaction/raw/decode", async (RawTransaction message, IRpcClient rpcClient) =>
-            await rpcClient.DecodeRawTransaction(message?.rawtransaction ?? message?.Transaction ?? "")
-        ).Produces<DecodeRawTransactionResponse>(StatusCodes.Status200OK);
+            {
+                var tx = await rpcClient.DecodeRawTransaction(message?.rawtransaction ?? message?.Transaction ?? "");
+
+                return JsonConvert.SerializeObject(tx, Formatting.Indented);
+            }
+        ).Produces<string>(StatusCodes.Status200OK);
 
         app.MapGet("/transaction/raw/{txId}", async (string txId, IRpcClient rpcClient) =>
-            await rpcClient.GetRawTransaction(txId)
-        ).Produces<RawTransactionResponse>(StatusCodes.Status200OK);
-        
+       {
+           var tx = await rpcClient.GetRawTransaction(txId);
+
+           return tx.hex;
+       }
+        ).Produces<string>(StatusCodes.Status200OK);
+
         app.MapPost("/transaction/raw/coinstake", async (CoinStakeTransaction message, IRpcClient rpcClient) =>
             {
                 var result = await rpcClient.CreateRawCoinStakeTransaction(new List<RawTxStakeInputs>
@@ -51,16 +67,23 @@ public class RpcModule : ICarterModule
                 return result;
             }
         ).Produces<string>(StatusCodes.Status200OK);
-        
+
         //obsolete as transaction might get to long:
         app.MapGet("/transaction/decode/{transaction}", async (string transaction, IRpcClient rpcClient) =>
-            await rpcClient.DecodeRawTransaction(transaction)
-        ).Produces<DecodeRawTransactionResponse>(StatusCodes.Status200OK);
+            {
+                var res = await rpcClient.DecodeRawTransaction(transaction);
+
+                return JsonConvert.SerializeObject(res, Formatting.Indented);
+            }
+        ).Produces<string>(StatusCodes.Status200OK);
 
         //obsolete as importaddress is needed 
         app.MapGet("/listunspents", async (IRpcClient rpcClient) =>
-            await rpcClient.GetUnspents()
-        ).Produces<List<Unspent>>(StatusCodes.Status200OK);
+        {
+            var unspent = await rpcClient.GetUnspents();
+            return JsonConvert.SerializeObject(unspent, Formatting.Indented);
+        }
+        ).Produces<string>(StatusCodes.Status200OK);
     }
 
     // ReSharper disable All
@@ -69,7 +92,7 @@ public class RpcModule : ICarterModule
         //old interface
         public string? Transaction { get; set; }
 
-        public string? rawtransaction { get; set;}
+        public string? rawtransaction { get; set; }
     }
 
     public class CoinStakeTransaction
@@ -85,7 +108,7 @@ public class RpcModule : ICarterModule
 
         // to spent P2SH address
         public string address { get; set; } = null!;
-        
+
         // original input + stakereward
         public decimal futureOutput { get; set; }
 
